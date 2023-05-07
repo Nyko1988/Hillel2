@@ -4,7 +4,7 @@ from HW_elemen.src.widgets.radio_button import RadioButton
 
 
 @pytest.mark.usefixtures('chrome')
-class TestRadioButton:
+class TestRadioButtonSelect:
     def test_widget(self):
         self.driver.get('https://demoqa.com/radio-button')
         button = 'Yes'
