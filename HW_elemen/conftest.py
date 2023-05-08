@@ -5,7 +5,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-@pytest.fixture
+@pytest.fixture()
 def chrome(request):
     service = ChromeService(ChromeDriverManager().install())
     driver = webdriver.Chrome(service=service)
