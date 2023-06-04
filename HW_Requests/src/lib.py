@@ -13,13 +13,18 @@ class GetInformationBank:
         element = requests.get(self.url).headers
         return element.get('Date')
 
+    def get_status_code(self):
+        status_code = requests.get(self.url).status_code
+        return status_code
+
+
     def write_response_from_server(self):
         date_of_element = requests.get(self.url).json()
-        with open(file=self.file, mode='a', encoding='utf-8') as e:
-            e.write('Response at {} is {}\n'.format(self.get_current_date(), requests.get(self.url).status_code))
+        with open(file=self.file, mode='w', encoding='utf-8') as e:
             for i in date_of_element:
                 e.write('Банк {} за адресою {}, {} в стані {}\n'.format(i.get('N_GOL'), i.get('N_OBL'), i.get('ADRESS'),
                                                                         i.get('NSTAN_GOL')))
+        return len(self.file)
 
 
 
@@ -33,16 +38,14 @@ class PostGoogleTranslate:
         "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
     }
 
-    def __init__(self, url: str = URL, sentence: str = '', target: str = 'uk', source: str = 'en', headers=None):
+    def __init__(self, url: str = URL, headers=None):
         if headers is None:
             headers = self.Headers
         self.url = url
-        self.sentence = sentence
-        self.target = target
-        self.source = source
-        self.payload = {"q": sentence, "target": target, "source": source}
         self.headers = headers
 
-    def get_translation(self):
-        response = requests.post(self.url, data=self.payload, headers=self.headers)
+    def get_translation(self, payload=None):
+        if payload is None:
+            payload = {"q": '', "target": 'uk', "source": 'en'}
+        response = requests.post(self.url, data=payload, headers=self.headers)
         return response.json()
